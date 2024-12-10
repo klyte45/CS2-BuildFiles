@@ -42,6 +42,7 @@
 
     <Message Text="Building project at dir $(FrontendDir)" Importance="high" />
     <Exec WorkingDirectory="$(FrontendDir)" Command="npm i" ContinueOnError="false" />
+    <Exec WorkingDirectory="$(FrontendDir)" Command="rmdir /S /Q dist" ContinueOnError="false" />
     <Exec WorkingDirectory="$(FrontendDir)" Command="npm run build:webpack" ContinueOnError="false" />
 
     <ItemGroup>
