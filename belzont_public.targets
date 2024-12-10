@@ -4,11 +4,13 @@
     <DebuggerMode Condition="'$(DebuggerMode)'==''">false</DebuggerMode>
     <DefineConstants Condition="'$(Bursted)'">BURST;$(DefineConstants)</DefineConstants>
     <IsBelzontCommonsMod>true</IsBelzontCommonsMod>
-    <DebugType>portable</DebugType>
     <DisableFastUpToDateCheck Condition="'$(Configuration)'=='Release'">true</DisableFastUpToDateCheck>
     <YoutubeLink>https://www.youtube.com/Klyte45</YoutubeLink>
     <KofiLink>https://ko-fi.com/klyte45</KofiLink>
-    
+    <DebugSymbols Condition="'$(Configuration)'=='Release'">False</DebugSymbols>
+    <DebugSymbols Condition="'$(Configuration)'=='Debug'">True</DebugSymbols>
+    <DebugType Condition="'$(Configuration)'=='Debug'">portable</DebugType>
+    <DebuggerMode Condition="'$(Configuration)'=='Debug'">true</DebuggerMode>    
   </PropertyGroup>
   <!--Publishing generation files-->
   <Target Name="SetupAttributes" BeforeTargets="BeforeBuild">
@@ -55,27 +57,27 @@
     <PackageReference Include="ilmerge" Version="3.0.40" />
   </ItemGroup>
 
-  <Target Name="MergeDll" AfterTargets="DeployWIP" Condition="!$(DebuggerMode) AND '$(NeedBuild)'">
+  <Target Name="MergeDll" AfterTargets="RunBurstDll" Condition="!$(DebuggerMode) AND '$(NeedBuild)'">
     <Exec Command="del &quot;$(DeployDir)\*.pdb&quot;" />
     <ItemGroup>
-      <ModDlls Include="$(DeployDir)/*.dll" Exclude="$(DeployDir)/K45EUIS_Ext.dll"/>
+      <ModDlls Include="$(DeployDir)/*.dll" Exclude="$(DeployDir)/K45EUIS_Ext.dll;$(DeployDir)/*_win_x86_64.dll"/>
     </ItemGroup>
     <Message Text="RUN MERGE DLL $(Bursted)" Importance="high"/>
   </Target>
 
-  <Target Name="RunMergeDll" AfterTargets="DeployWIP" Condition="'@(ModDlls->Count())' &gt; 1 AND !$(DebuggerMode)" DependsOnTargets="MergeDll">
+  <Target Name="RunMergeDll" AfterTargets="RunBurstDll" Condition="'@(ModDlls->Count())' &gt; 1 AND !$(DebuggerMode)" DependsOnTargets="MergeDll">
     <ItemGroup>
-      <ModDlls2 Include="$(DeployDir)/*.dll" Exclude="$(DeployDir)/$(TargetName).dll;$(DeployDir)/K45EUIS_Ext.dll" />
+      <ModDlls2 Include="$(DeployDir)/*.dll" Exclude="$(DeployDir)/$(TargetName).dll;$(DeployDir)/K45EUIS_Ext.dll;$(DeployDir)/*_win_x86_64.dll" />
     </ItemGroup>
     <Exec Command="$(ILMergeConsolePath)  /lib:&quot;$(K45_CS2_ALLROOT)\_Managed DLLs&quot; /targetplatform:v4,&quot;$(K45_CS2_ALLROOT)\_Managed DLLs&quot; /out:&quot;$(DeployDir)/$(SolutionName).dll&quot; &quot;$(DeployDir)/$(TargetName).dll&quot; @(ModDlls2->'&quot;%(FullPath)&quot;', ' ')" />
     <ItemGroup>
-      <DllsToDelete Include="$(DeployDir)/*.dll" Exclude="$(DeployDir)/$(SolutionName).dll;$(DeployDir)/K45EUIS_Ext.dll" />
+      <DllsToDelete Include="$(DeployDir)/*.dll" Exclude="$(DeployDir)/$(SolutionName).dll;$(DeployDir)/K45EUIS_Ext.dll;$(DeployDir)/*_win_x86_64.dll" />
     </ItemGroup>
     <Exec Command="del &quot;$(DeployDir)\*.pdb&quot;" />
     <Exec Command="del  @(DllsToDelete->'&quot;%(FullPath)&quot;', ' ')" />
   </Target>
 
-  <Target Name="RunBurstDll" AfterTargets="DeployWIP" Condition="$(Bursted)" DependsOnTargets="RunMergeDll">
+  <Target Name="RunBurstDll" AfterTargets="DeployWIP" Condition="$(Bursted)">
     <PropertyGroup>
       <TargetPath>$(DeployDir)/$(SolutionName).dll</TargetPath>
     </PropertyGroup>
