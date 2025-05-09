@@ -10,7 +10,8 @@
     <DebugSymbols Condition="'$(Configuration)'=='Release'">False</DebugSymbols>
     <DebugSymbols Condition="'$(Configuration)'=='Debug'">True</DebugSymbols>
     <DebugType Condition="'$(Configuration)'=='Debug'">portable</DebugType>
-    <DebuggerMode Condition="'$(Configuration)'=='Debug'">true</DebuggerMode>    
+    <DebuggerMode Condition="'$(Configuration)'=='Debug'">true</DebuggerMode> 
+    <ManagedDllPath Condition="'$(ManagedDllPath)'==''">$(K45_CS2_ALLROOT)\_Managed DLLs</ManagedDllPath>   
   </PropertyGroup>
   <!--Publishing generation files-->
   <Target Name="SetupAttributes" BeforeTargets="BeforeBuild">
@@ -72,7 +73,7 @@
     <ItemGroup>
       <ModDlls2 Include="$(DeployDir)/*.dll" Exclude="$(DeployDir)/$(TargetName).dll;$(DeployDir)/K45EUIS_Ext.dll;$(DeployDir)/*_win_x86_64.dll" />
     </ItemGroup>
-    <Exec Command="$(ILMergeConsolePath)  /lib:&quot;$(K45_CS2_ALLROOT)\_Managed DLLs&quot; /targetplatform:v4,&quot;$(K45_CS2_ALLROOT)\_Managed DLLs&quot; /out:&quot;$(DeployDir)/$(SolutionName).dll&quot; &quot;$(DeployDir)/$(TargetName).dll&quot; @(ModDlls2->'&quot;%(FullPath)&quot;', ' ')" />
+    <Exec Command="$(ILMergeConsolePath)  /lib:&quot;$(ManagedDllPath)&quot; /targetplatform:v4,&quot;$(ManagedDllPath)&quot; /out:&quot;$(DeployDir)/$(SolutionName).dll&quot; &quot;$(DeployDir)/$(TargetName).dll&quot; @(ModDlls2->'&quot;%(FullPath)&quot;', ' ')" />
     <ItemGroup>
       <DllsToDelete Include="$(DeployDir)/*.dll" Exclude="$(DeployDir)/$(SolutionName).dll;$(DeployDir)/K45EUIS_Ext.dll;$(DeployDir)/*_win_x86_64.dll" />
     </ItemGroup>
