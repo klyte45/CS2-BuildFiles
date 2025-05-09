@@ -12,6 +12,7 @@
     <DebugType Condition="'$(Configuration)'=='Debug'">portable</DebugType>
     <DebuggerMode Condition="'$(Configuration)'=='Debug'">true</DebuggerMode> 
     <ManagedDllPath Condition="'$(ManagedDllPath)'==''">$(CSII_MANAGEDPATH)</ManagedDllPath>   
+    <LangVersion>10.0</LangVersion>
   </PropertyGroup>
   <!--Publishing generation files-->
   <Target Name="SetupAttributes" BeforeTargets="BeforeBuild">
