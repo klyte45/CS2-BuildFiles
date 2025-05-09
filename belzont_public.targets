@@ -11,7 +11,7 @@
     <DebugSymbols Condition="'$(Configuration)'=='Debug'">True</DebugSymbols>
     <DebugType Condition="'$(Configuration)'=='Debug'">portable</DebugType>
     <DebuggerMode Condition="'$(Configuration)'=='Debug'">true</DebuggerMode> 
-    <ManagedDllPath Condition="'$(ManagedDllPath)'==''">$(K45_CS2_ALLROOT)\_Managed DLLs</ManagedDllPath>   
+    <ManagedDllPath Condition="'$(ManagedDllPath)'==''">$(CSII_MANAGEDPATH)</ManagedDllPath>   
   </PropertyGroup>
   <!--Publishing generation files-->
   <Target Name="SetupAttributes" BeforeTargets="BeforeBuild">
