@@ -1,5 +1,6 @@
 <Project>
   <PropertyGroup>
+    <TargetFramework Condition="'$(TargetFramework)' == ''">net48</TargetFramework>
     <Bursted Condition="'$(Bursted)'==''">false</Bursted>
     <DebuggerMode Condition="'$(DebuggerMode)'==''">false</DebuggerMode>
     <DefineConstants Condition="'$(Bursted)'">BURST;$(DefineConstants)</DefineConstants>
@@ -50,6 +51,7 @@
       <idxPrevChanges>$(ChangelogData.ToUpper().IndexOf('## FROM'))</idxPrevChanges>
       <ChangelogData Condition="$(idxPrevChanges) > 0">$(ChangelogData.Substring(0, $(idxPrevChanges)))</ChangelogData>
     </PropertyGroup>
+    <WriteLinesToFile File="$(PublishConfigurationPath)"            Lines="&lt;Publish /&gt;"            Overwrite="true"            Encoding="Unicode"/>
     <XmlPoke XmlInputPath="$(PublishConfigurationPath)" Value="$(PublishContent)" Query="//Publish" />
 
     <XmlPoke XmlInputPath="$(PublishConfigurationPath)" Value="$([System.IO.File]::ReadAllText($(ProjectDir)/README.md).Replace('%26','%26amp%3B').Replace('%22','%26quot%3B').Replace('%3c','%26lt%3B').Replace('%3e','%26gt%3B'))" Query="//LongDescription" />
