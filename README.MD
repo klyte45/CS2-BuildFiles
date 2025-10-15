@@ -7,6 +7,12 @@ This repository contains useful targets to automate the building and publishing 
 To fully take advantage from `belzont_public.targets` targets, you need to have this set of properties in your mod csproj file:
 
 ```xml
+<!-- 
+    Add this project as git submodule. Then import the targets file via path.
+    You also can just copy the targets file to your project, but you won't get fixes automatically when changed on this repo.
+-->
+ <Import Project="$(SolutionDir)\_Build\belzont_public.targets" />
+
 <!--Mod basic data-->
 <PropertyGroup>
   <IsBelzontCommonsMod>false</IsBelzontCommonsMod> <!-- Only use "true" if using the Belzont Commons library. It's true by default -->
