@@ -9,6 +9,7 @@ To fully take advantage from `belzont_public.targets` targets, you need to have 
 ```xml
 <!--Mod basic data-->
 <PropertyGroup>
+  <IsBelzontCommonsMod>false</IsBelzontCommonsMod> <!-- Only use "true" if using the Belzont Commons library. It's true by default -->
   <ModId>00000</ModId> <!-- PDXMods ID -->
   <Version>0.0.0.0</Version> <!-- Mod DLL version - must follow the pattern A.B.C.D -->
   <GameVersion>1.1.*</GameVersion> <!-- The game version supported, as described on PDXMods development wiki -->
