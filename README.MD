@@ -23,9 +23,16 @@ To fully take advantage from `belzont_public.targets` targets, you need to have 
   <DisplayName>Mod Name</DisplayName><!-- Display name of the mod -->
   <ShortDescription>A description</ShortDescription><!-- Short description of the mod -->
   <ForumLink>https://forum.paradoxplaza.com/forum/threads/AAAA-AAAA-aaaa/</ForumLink> <!-- Thread of the mod in the PDX Forums, if applicable (leave empty if not) -->
+  <!-- Social media links supported by PublishSettings.xml goes here. All them are optional -->
+  <GitHubLink>aaaaa</GitHubLink>
+    <BMACLink>bbbbbb</BMACLink>
+    <CrowdinLink>cccccc</CrowdinLink>
+    <TwitterLink>dddddd</TwitterLink>
+    <YoutubeLink>eeeeee</YoutubeLink>
+    <KofiLink>fffffff</KofiLink>
 </PropertyGroup>
 
-<!--Mod multíple value data-->
+<!--Mod multiple value data-->
 <ItemGroup>
   <ModTag Include="Code Mod" /><!-- Use semicolon to separate the tags -->
   <Screenshots Include="Screenshots/*.jpg" /><!-- Suggested to have a folder where the images are left -->
