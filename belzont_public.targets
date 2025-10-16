@@ -102,4 +102,6 @@
       <DeployDir>$(LocalModsPath)\$(SolutionName)</DeployDir>
     </PropertyGroup>
   </Target>
+  
+  <Import Project="$(SolutionDir)..\_Shared\local_shared.targets" Condition="Exists('$(SolutionDir)..\_Shared\local_shared.targets') AND '$(IsBelzontCommonsMod)' == 'true'" />
 </Project>

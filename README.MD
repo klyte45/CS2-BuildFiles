@@ -7,8 +7,15 @@ This repository contains useful targets to automate the building and publishing 
 To fully take advantage from `belzont_public.targets` targets, you need to have this set of properties in your mod csproj file:
 
 ```xml
+<!-- 
+    Add this project as git submodule. Then import the targets file via path.
+    You also can just copy the targets file to your project, but you won't get fixes automatically when changed on this repo.
+-->
+ <Import Project="$(SolutionDir)\_Build\belzont_public.targets" />
+
 <!--Mod basic data-->
 <PropertyGroup>
+  <IsBelzontCommonsMod>false</IsBelzontCommonsMod> <!-- Only use "true" if using the Belzont Commons library. It's true by default -->
   <ModId>00000</ModId> <!-- PDXMods ID -->
   <Version>0.0.0.0</Version> <!-- Mod DLL version - must follow the pattern A.B.C.D -->
   <GameVersion>1.1.*</GameVersion> <!-- The game version supported, as described on PDXMods development wiki -->
@@ -16,9 +23,16 @@ To fully take advantage from `belzont_public.targets` targets, you need to have 
   <DisplayName>Mod Name</DisplayName><!-- Display name of the mod -->
   <ShortDescription>A description</ShortDescription><!-- Short description of the mod -->
   <ForumLink>https://forum.paradoxplaza.com/forum/threads/AAAA-AAAA-aaaa/</ForumLink> <!-- Thread of the mod in the PDX Forums, if applicable (leave empty if not) -->
+  <!-- Social media links supported by PublishSettings.xml goes here. All them are optional -->
+  <GitHubLink>aaaaa</GitHubLink>
+    <BMACLink>bbbbbb</BMACLink>
+    <CrowdinLink>cccccc</CrowdinLink>
+    <TwitterLink>dddddd</TwitterLink>
+    <YoutubeLink>eeeeee</YoutubeLink>
+    <KofiLink>fffffff</KofiLink>
 </PropertyGroup>
 
-<!--Mod multíple value data-->
+<!--Mod multiple value data-->
 <ItemGroup>
   <ModTag Include="Code Mod" /><!-- Use semicolon to separate the tags -->
   <Screenshots Include="Screenshots/*.jpg" /><!-- Suggested to have a folder where the images are left -->
