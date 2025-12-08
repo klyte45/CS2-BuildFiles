@@ -45,6 +45,7 @@
       <PublishContent Condition="'$(YoutubeLink)' != ''">$(PublishContent)<ExternalLink Type="youtube" Url="$(YoutubeLink)"/></PublishContent>
       <PublishContent Condition="'$(KofiLink)' != ''">$(PublishContent)<ExternalLink Type="kofi" Url="$(KofiLink)"/></PublishContent>
       <PublishContent Condition="'$(BMACLink)' != ''">$(PublishContent)<ExternalLink Type="buymeacoffee" Url="$(BMACLink)"/></PublishContent>
+      <PublishContent Condition="'$(DiscordLink)' != ''">$(PublishContent)<ExternalLink Type="discord" Url="$(DiscordLink)"/></PublishContent> 
       <PublishContent Condition="'$(CrowdinLink)' != ''">$(PublishContent)<ExternalLink Type="crowdin" Url="$(CrowdinLink)"/></PublishContent>
       <PublishContent Condition="'$(TwitterLink)' != ''">$(PublishContent)<ExternalLink Type="twitter" Url="$(TwitterLink)"/></PublishContent> 
       <ChangelogData>$([System.IO.File]::ReadAllText($(ProjectDir)changelog.md))</ChangelogData>
