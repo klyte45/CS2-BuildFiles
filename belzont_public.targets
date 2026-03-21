@@ -87,7 +87,7 @@
 
   <!-- Target to print success message and version at the end of the build -->
   <Target Name="ShowBuildSuccess" AfterTargets="Build" Condition="'$(MSBuildLastTaskResult)' == 'True'">
-    <Message Text="Build successful! Generated version: $(Version)" Importance="high" />
+    <Message Text="Build succeeded! Generated version: $(Version)" Importance="high" />
   </Target>
 
   <Target Name="RunBurstDll" AfterTargets="DeployWIP" Condition="$(Bursted)">
