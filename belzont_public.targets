@@ -11,12 +11,21 @@
     <DebugSymbols Condition="'$(Configuration)'=='Release'">False</DebugSymbols>
     <DebugSymbols Condition="'$(Configuration)'=='Debug'">True</DebugSymbols>
     <DebugType Condition="'$(Configuration)'=='Debug'">portable</DebugType>
-    <DebuggerMode Condition="'$(Configuration)'=='Debug'">true</DebuggerMode> 
-    <ManagedDllPath Condition="'$(ManagedDllPath)'==''">$(CSII_MANAGEDPATH)</ManagedDllPath>   
+    <DebuggerMode Condition="'$(Configuration)'=='Debug'">true</DebuggerMode>
+    <ManagedDllPath Condition="'$(ManagedDllPath)'==''">$(CSII_MANAGEDPATH)</ManagedDllPath>
     <LangVersion>12.0</LangVersion>
   </PropertyGroup>
+  <Target Name="VerifyKlyteModAttribute" BeforeTargets="RunBurstDll" Condition="$(IsBelzontCommonsMod)">
+    <Exec Command="powershell -Command &quot;$attrs = [System.Reflection.Assembly]::LoadFrom('$(TargetPath)').CustomAttributes;$exists = $attrs.Where({ $_.AttributeType.FullName -eq 'Belzont.AssemblyUtility.KlyteModDescriptionAttribute' }).Count -gt 0; if(!$exists) { exit 1 }&quot;">
+      <Output TaskParameter="ExitCode" PropertyName="ExitCode" />
+    </Exec>
+    <Exec Condition="'$(ExitCode)' != '0'" Command="powershell -Command &quot;$attrs = [System.Reflection.Assembly]::LoadFrom('$(TargetPath)').CustomAttributes; echo $attrs&quot;" ContinueOnError="true"/>
+    <RemoveDir Condition="'$(ExitCode)' != '0'" Directories="$(ProjectDir)/bin;$(ProjectDir)/obj" />
+    <Error Text="KlyteModDescriptionAttribute not found in assembly" Condition="'$(ExitCode)' != '0'" />
+  </Target>
   <!--Publishing generation files-->
   <Target Name="SetupAttributes" BeforeTargets="BeforeBuild">
+    <Message Text="Preparing attributes" Importance="high" />
     <ItemGroup Condition="$(IsBelzontCommonsMod)">
       <AssemblyAttribute Include="Belzont.AssemblyUtility.KlyteModDescriptionAttribute">
         <_Parameter1>$(ModId)</_Parameter1>
@@ -41,18 +50,25 @@
       <PublishContent>$(PublishContent)@(ModTag->'&lt;Tag Value="%(Identity)" /&gt;','%0a%0d')</PublishContent>
       <PublishContent>$(PublishContent)@(Screenshots->'&lt;Screenshot Value="%(Identity)" /&gt;','%0a%0d')</PublishContent>
       <PublishContent>$(PublishContent)@(Dependency->'&lt;Dependency Id="%(ModId)" ModVersion="%(Version)" DisplayName="%(DisplayName)"/&gt;','%0a%0d')</PublishContent>
-      <PublishContent Condition="'$(GitHubLink)' != ''">$(PublishContent)<ExternalLink Type="github" Url="$(GitHubLink)"/></PublishContent>
-      <PublishContent Condition="'$(YoutubeLink)' != ''">$(PublishContent)<ExternalLink Type="youtube" Url="$(YoutubeLink)"/></PublishContent>
-      <PublishContent Condition="'$(KofiLink)' != ''">$(PublishContent)<ExternalLink Type="kofi" Url="$(KofiLink)"/></PublishContent>
-      <PublishContent Condition="'$(BMACLink)' != ''">$(PublishContent)<ExternalLink Type="buymeacoffee" Url="$(BMACLink)"/></PublishContent>
-      <PublishContent Condition="'$(DiscordLink)' != ''">$(PublishContent)<ExternalLink Type="discord" Url="$(DiscordLink)"/></PublishContent> 
-      <PublishContent Condition="'$(CrowdinLink)' != ''">$(PublishContent)<ExternalLink Type="crowdin" Url="$(CrowdinLink)"/></PublishContent>
-      <PublishContent Condition="'$(TwitterLink)' != ''">$(PublishContent)<ExternalLink Type="twitter" Url="$(TwitterLink)"/></PublishContent> 
+      <PublishContent Condition="'$(GitHubLink)' != ''">$(PublishContent)<ExternalLink Type="github" Url="$(GitHubLink)"/>
+      </PublishContent>
+      <PublishContent Condition="'$(YoutubeLink)' != ''">$(PublishContent)<ExternalLink Type="youtube" Url="$(YoutubeLink)"/>
+      </PublishContent>
+      <PublishContent Condition="'$(KofiLink)' != ''">$(PublishContent)<ExternalLink Type="kofi" Url="$(KofiLink)"/>
+      </PublishContent>
+      <PublishContent Condition="'$(BMACLink)' != ''">$(PublishContent)<ExternalLink Type="buymeacoffee" Url="$(BMACLink)"/>
+      </PublishContent>
+      <PublishContent Condition="'$(DiscordLink)' != ''">$(PublishContent)<ExternalLink Type="discord" Url="$(DiscordLink)"/>
+      </PublishContent>
+      <PublishContent Condition="'$(CrowdinLink)' != ''">$(PublishContent)<ExternalLink Type="crowdin" Url="$(CrowdinLink)"/>
+      </PublishContent>
+      <PublishContent Condition="'$(TwitterLink)' != ''">$(PublishContent)<ExternalLink Type="twitter" Url="$(TwitterLink)"/>
+      </PublishContent>
       <ChangelogData>$([System.IO.File]::ReadAllText($(ProjectDir)changelog.md))</ChangelogData>
       <idxPrevChanges>$(ChangelogData.ToUpper().IndexOf('## FROM'))</idxPrevChanges>
       <ChangelogData Condition="$(idxPrevChanges) > 0">$(ChangelogData.Substring(0, $(idxPrevChanges)))</ChangelogData>
     </PropertyGroup>
-    <WriteLinesToFile File="$(PublishConfigurationPath)"            Lines="&lt;Publish /&gt;"            Overwrite="true"            Encoding="Unicode"/>
+    <WriteLinesToFile File="$(PublishConfigurationPath)" Lines="&lt;Publish /&gt;" Overwrite="true" Encoding="Unicode"/>
     <XmlPoke XmlInputPath="$(PublishConfigurationPath)" Value="$(PublishContent)" Query="//Publish" />
 
     <XmlPoke XmlInputPath="$(PublishConfigurationPath)" Value="$([System.IO.File]::ReadAllText($(ProjectDir)/README.md).Replace('%26','%26amp%3B').Replace('%22','%26quot%3B').Replace('%3c','%26lt%3B').Replace('%3e','%26gt%3B'))" Query="//LongDescription" />
@@ -108,6 +124,6 @@
       <DeployDir>$(LocalModsPath)\$(SolutionName)</DeployDir>
     </PropertyGroup>
   </Target>
-  
+
   <Import Project="$(CSII_SHARED_TARGETS_DIR)\local_shared.targets" Condition="Exists('$(CSII_SHARED_TARGETS_DIR)\local_shared.targets') AND '$(IsBelzontCommonsMod)' == 'true'" />
 </Project>
